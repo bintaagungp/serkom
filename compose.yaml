@@ -1,0 +1,29 @@
+services:
+    http:
+      container_name: http
+      build:
+        context: .
+        dockerfile: php.Dockerfile
+      ports:
+        - 8080:80
+      networks:
+        - serkom-net
+      restart: on-failure
+      depends_on:
+        - database
+      volumes:
+        - ./web/:/var/www/html/
+    database:
+      container_name: database
+      image: mysql:8.0-debian
+      restart: always
+      environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: serkom
+      ports:
+        - 3306:3306
+      networks:
+        - serkom-net
+
+networks:
+  serkom-net:
