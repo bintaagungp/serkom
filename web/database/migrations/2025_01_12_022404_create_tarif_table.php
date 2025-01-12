@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('tarif', function (Blueprint $table) {
             $table->id();
-            $table->string('daya', 255);
+            $table->integer('daya');
             $table->integer('tarifperkwh');
             $table->timestamps();
         });

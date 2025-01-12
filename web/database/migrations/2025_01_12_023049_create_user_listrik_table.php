@@ -20,8 +20,8 @@ return new class extends Migration
             $table->unsignedBigInteger('tarif_id');
             $table->unsignedBigInteger('user_id');
 
-            $table->foreign('tarif_id')->references('id')->on('tarif');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('tarif_id')->references('id')->on('tarif')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

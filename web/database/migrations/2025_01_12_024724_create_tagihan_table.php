@@ -22,8 +22,8 @@ return new class extends Migration
             $table->unsignedBigInteger('penggunaan_id');
             $table->unsignedBigInteger('user_listrik_id');
 
-            $table->foreign('penggunaan_id')->references('id')->on('penggunaan');
-            $table->foreign('user_listrik_id')->references('id')->on('user_listrik');
+            $table->foreign('penggunaan_id')->references('id')->on('penggunaan')->onDelete('cascade');
+            $table->foreign('user_listrik_id')->references('id')->on('user_listrik')->onDelete('cascade');
         });
     }
 
