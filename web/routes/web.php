@@ -1,22 +1,39 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProfileController  as UserProfileController;
+use App\Http\Controllers\TagihanController as UserTagihanController;
+use App\Http\Controllers\ListrikController as UserListrikController;
 use App\Http\Controllers\Admin\DayaController;
 use App\Http\Controllers\Admin\PelangganController;
+use App\Http\Controllers\Admin\TagihanController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::middleware('verified')->get('/dashboard', function () {
+        return redirect()->route('listrik');
+    })->name('dashboard');
+
+    Route::get('/profile', [UserProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [UserProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [UserProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/tagihan', [UserTagihanController::class, 'index'])->name('tagihan');
+    Route::post('/tagihan', [UserTagihanController::class, 'store'])->name('tagihan.store');
+    Route::get('/tagihan/{id}/show', [UserTagihanController::class, 'show'])->name('tagihan.show');
+    Route::get('/tagihan/{id}/edit', [UserTagihanController::class, 'edit'])->name('tagihan.edit');
+    Route::put('/tagihan/{id}/update', [UserTagihanController::class, 'update'])->name('tagihan.update');
+    Route::delete('/tagihan/{id}/delete', [UserTagihanController::class, 'destroy'])->name('tagihan.destroy');
+
+    Route::get('/listrik', [UserListrikController::class, 'index'])->name('listrik');
+    Route::post('/listrik', [UserListrikController::class, 'store'])->name('listrik.store');
+    Route::get('/listrik/{id}/show', [UserListrikController::class, 'show'])->name('listrik.show');
+    Route::get('/listrik/{id}/edit', [UserListrikController::class, 'edit'])->name('listrik.edit');
+    Route::put('/listrik/{id}/update', [UserListrikController::class, 'update'])->name('listrik.update');
+    Route::delete('/listrik/{id}/delete', [UserListrikController::class, 'destroy'])->name('listrik.destroy');
 
     Route::prefix('admin')->group(function () {
         Route::get('/dashboard', function() {
@@ -38,7 +55,9 @@ Route::middleware('auth')->group(function () {
         Route::delete('/pelanggan/{id}/delete', [PelangganController::class, 'destroy'])->name('admin.pelanggan.destroy');
 
         Route::get('/tagihan', [TagihanController::class, 'index'])->name('admin.tagihan');
-        Route::post('/tagihan', [TagihanController::class, 'store'])->name('admin.tagihan.store');
+        Route::get('/tagihan/{id}/show', [TagihanController::class, 'show'])->name('admin.tagihan.show');
+        Route::post('/tagihan/{id}/penggunaan', [TagihanController::class, 'store'])->name('admin.tagihan.store');
+        Route::delete('/tagihan/{id}/penggunaan/{penggunaan_id}', [TagihanController::class, 'destroyPenggunaan'])->name('admin.tagihan.destroyPenggunaan');
         Route::get('/tagihan/{id}/edit', [TagihanController::class, 'edit'])->name('admin.tagihan.edit');
         Route::put('/tagihan/{id}/update', [TagihanController::class, 'update'])->name('admin.tagihan.update');
         Route::delete('/tagihan/{id}/delete', [TagihanController::class, 'destroy'])->name('admin.tagihan.destroy');

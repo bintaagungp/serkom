@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             TarifSeeder::class,
+            TagihanSeeder::class,
         ]);
 
         // User::factory()->create([

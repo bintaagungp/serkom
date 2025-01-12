@@ -7,10 +7,10 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <x-modal :name="'tambah-daya'">
+            {{-- <x-modal :name="'tambah-daya'">
                 <div class="p-8 text-gray-900 dark:text-gray-100">
                     <p class="text-xl mb-5">Tambah Daya</p>
-                    <form :action="route("admin.daya.store")" method="post" class="flex flex-col gap-8" >
+                    <form :action="route("admin.tagihan.store")" method="post" class="flex flex-col gap-8" >
                         @csrf
                         <label>
                             <p class="text-gray-900 dark:text-gray-100">Daya</p>
@@ -27,20 +27,15 @@
             <div x-data>
                 <button class="mb-5 p-5 rounded bg-gray-50 border-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
                 x-on:click="$dispatch('open-modal', 'tambah-daya')">Tambah</button>
-            </div>
-            <x-table :columns="[['name' => 'Daya', 'field' => 'daya'], ['name' => 'Tarif per kwh', 'field' => 'tarifperkwh']]" :rows="$tarif->items()">
+            </div> --}}
+            <x-table :columns="[['name' => 'Nomor KWH', 'field' => 'nomor_kwh'], ['name' => 'daya', 'field' => 'daya']]" :rows="$listrik->items()">
                 <x-slot name="tableActions">
                     <div class="flex flex-wrap space-x-4">
-                        <a :href="`daya/${row.id}/edit`" class="text-blue-500 underline">Edit</a>
-                        <form :action="`daya/${row.id}/delete`" method="post">
-                            @csrf
-                            @method('delete')
-                            <button class="text-red-500 underline">Delete</button>
-                        </form>
+                        <a :href="`/admin/tagihan/${row.id}/show`" class="text-blue-500 underline">View</a>
                     </div>
                 </x-slot>
             </x-table>
-            {{ $tarif->links() }}
+            {{ $listrik->links() }}
         </div>
 
     </div>
