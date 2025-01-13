@@ -10,6 +10,8 @@
             <x-table :columns="[
                 ['name' => 'Nomor Tagihan', 'field' => 'tagihan_id'],
                 ['name' => 'Nomor KWH', 'field' => 'nomor_kwh'],
+                ['name' => 'Bulan', 'field' => 'bulan'],
+                ['name' => 'Tahun', 'field' => 'tahun'],
                 ['name' => 'Daya', 'field' => 'daya'],
                 ['name' => 'Jumlah Meter', 'field' => 'jumlah_meter'],
                 ['name' => 'Tagihan', 'field' => 'total'],

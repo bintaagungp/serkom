@@ -34,12 +34,17 @@ class PelangganController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+        ]);
+
         $pelanggan = new User;
         $pelanggan->name = $request->name;
         $pelanggan->email = $request->email;
         $pelanggan->password = Hash::make('listrik123');
         $pelanggan->save();
-        return redirect()->route('admin.pelanggan');
+        return redirect()->route('admin.pelanggan')->with('alert-success', 'Successfully adding new data');
     }
 
     /**
@@ -48,7 +53,7 @@ class PelangganController extends Controller
     public function show(string $id)
     {
         $pelanggan = User::find($id);
-        $listrik = UserListrik::join('tarif', 'tarif.id', "=", 'user_listrik.tarif_id')->where('user_id', $id)->paginate(10);
+        $listrik = UserListrik::select('user_listrik.id', 'user_listrik.user_id','user_listrik.nomor_kwh', 'user_listrik.alamat', 'tarif.daya', 'tarif.tarifperkwh')->join('tarif', 'tarif.id', "=", 'user_listrik.tarif_id')->where('user_id', $id)->paginate(10);
         $tarif = Tarif::all();
         return view("admin.pelanggan.show", ['pelanggan' => $pelanggan, 'listrik' => $listrik, 'tarif' => $tarif]);
     }
@@ -67,12 +72,17 @@ class PelangganController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+        ]);
+
         $tarif = User::find($id);
         $tarif->name = $request->name;
         $tarif->email = $request->email;
         $tarif->save();
 
-        return redirect()->route('admin.pelanggan');
+        return redirect()->route('admin.pelanggan')->with('alert-success', 'Successfully update data');
     }
 
     /**
@@ -82,11 +92,16 @@ class PelangganController extends Controller
     {
         $pelanggan = User::find($id);
         $pelanggan->delete();
-        return redirect()->route('admin.pelanggan');
+        return redirect()->route('admin.pelanggan')->with('alert-success', 'Successfully remove data');
     }
 
     public function storeListrik(Request $request, $id)
     {
+        $request->validate([
+            'alamat' => 'required',
+            'tarif_id' => 'required|integer',
+        ]);
+
         $listrik = new UserListrik;
         $listrik->nomor_kwh = Str::uuid();
         $listrik->alamat = $request->alamat;
@@ -94,7 +109,7 @@ class PelangganController extends Controller
         $listrik->tarif_id = $request->tarif_id;
         $listrik->save();
 
-        return redirect()->route('admin.pelanggan.show', ['id' => $id]);
+        return redirect()->route('admin.pelanggan.show', ['id' => $id])->with('alert-success', 'Successfully adding new data');
     }
 
     public function deleteListrik($id, $listrik_id)
@@ -102,6 +117,6 @@ class PelangganController extends Controller
         $listrik = UserListrik::where('user_id', $id)->where('id', $listrik_id)->first();
         $listrik->delete();
 
-        return redirect()->route('admin.pelanggan.show', ['id' => $id]);
+        return redirect()->route('admin.pelanggan.show', ['id' => $id])->with('alert-success', 'Successfully remove data');
     }
 }

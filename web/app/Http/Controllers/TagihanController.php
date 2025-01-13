@@ -23,6 +23,8 @@ class TagihanController extends Controller
             array_push($result, [
                 'tagihan_id' => $t->id,
                 'nomor_kwh' => $t->nomor_kwh,
+                'bulan' => $t->bulan,
+                'tahun' => $t->tahun,
                 'total' => $t->tarifperkwh * $t->jumlah_meter,
                 'daya'=>  $t->daya,
                 'jumlah_meter' => $t->jumlah_meter,

@@ -28,7 +28,7 @@
                 <button class="mb-5 p-5 rounded bg-gray-50 border-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
                 x-on:click="$dispatch('open-modal', 'tambah-daya')">Tambah</button>
             </div> --}}
-            <x-table :columns="[['name' => 'Nomor KWH', 'field' => 'nomor_kwh'], ['name' => 'daya', 'field' => 'daya']]" :rows="$listrik->items()">
+            <x-table :columns="[['name' => 'Nomor KWH', 'field' => 'nomor_kwh'], ['name' => 'Daya', 'field' => 'daya'], ['name' => 'Nama', 'field' => 'name']]" :rows="$listrik->items()">
                 <x-slot name="tableActions">
                     <div class="flex flex-wrap space-x-4">
                         <a :href="`/admin/tagihan/${row.id}/show`" class="text-blue-500 underline">View</a>

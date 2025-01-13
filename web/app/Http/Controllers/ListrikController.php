@@ -16,7 +16,7 @@ class ListrikController extends Controller
     public function index()
     {
         $pelanggan = User::find(auth()->user()->id);
-        $listrik = UserListrik::join('tarif', 'tarif.id', "=", 'user_listrik.tarif_id')->where('user_id', auth()->user()->id)->paginate(10);
+        $listrik = UserListrik::select('user_listrik.id', 'user_listrik.nomor_kwh', 'user_listrik.alamat', 'tarif.daya', 'tarif.tarifperkwh')->join('tarif', 'tarif.id', "=", 'user_listrik.tarif_id')->where('user_id', auth()->user()->id)->paginate(10);
         $tarif = Tarif::all();
         return view("listrik", ['pelanggan' => $pelanggan, 'listrik' => $listrik, 'tarif' => $tarif]);
     }
@@ -34,6 +34,11 @@ class ListrikController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'tarif_id' => 'required|integer',
+            'alamat' => 'required',
+        ]);
+
         $listrik = new UserListrik;
         $listrik->nomor_kwh = Str::uuid();
         $listrik->alamat = $request->alamat;
@@ -41,7 +46,7 @@ class ListrikController extends Controller
         $listrik->tarif_id = $request->tarif_id;
         $listrik->save();
 
-        return redirect()->route('listrik');
+        return redirect()->route('listrik')->with('alert-success', 'Successfully adding new data');
     }
 
     /**
@@ -76,6 +81,6 @@ class ListrikController extends Controller
         $listrik = UserListrik::where('user_id', auth()->user()->id)->where('id', $id)->first();
         $listrik->delete();
 
-        return redirect()->route('listrik');
+        return redirect()->route('listrik')->with('alert-success', 'Successfully remove data');
     }
 }

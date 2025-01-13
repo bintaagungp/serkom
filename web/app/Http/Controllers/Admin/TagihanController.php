@@ -15,8 +15,8 @@ class TagihanController extends Controller
      */
     public function index()
     {
-        $listrik = UserListrik::select('user_listrik.id', 'user_listrik.nomor_kwh', 'user_listrik.alamat', 'tarif.daya', 'tarif.tarifperkwh')
-        ->join('tarif', 'tarif.id', '=', 'user_listrik.tarif_id')->paginate(10);
+        $listrik = UserListrik::select('users.name', 'user_listrik.id', 'user_listrik.nomor_kwh', 'user_listrik.alamat', 'tarif.daya', 'tarif.tarifperkwh')
+        ->join('tarif', 'tarif.id', '=', 'user_listrik.tarif_id')->join('users', 'users.id', '=', 'user_listrik.user_id')->paginate(10);
         return view('admin.tagihan', ['listrik' => $listrik]);
     }
 
@@ -33,6 +33,13 @@ class TagihanController extends Controller
      */
     public function store(Request $request, $id)
     {
+        $request->validate([
+            'bulan' => 'required|integer',
+            'tahun' => 'required|integer',
+            'meter_awal' => 'required|integer',
+            'meter_akhir' => 'required|integer',
+        ]);
+
         $penggunaan = new Penggunaan;
         $penggunaan->bulan = $request->bulan;
         $penggunaan->tahun = $request->tahun;
@@ -49,7 +56,7 @@ class TagihanController extends Controller
         $tagihan->user_listrik_id = $id;
         $tagihan->save();
 
-        return redirect()->route('admin.tagihan.show', ['id' => $id]);
+        return redirect()->route('admin.tagihan.show', ['id' => $id])->with('alert-success', 'Successfully adding new data');
     }
 
     /**
@@ -94,6 +101,6 @@ class TagihanController extends Controller
         $penggunaan = Penggunaan::where('user_listrik_id', $id)->where('id', $penggunaan_id)->first();
         $penggunaan->delete();
 
-        return redirect()->route('admin.tagihan.show', ['id' => $id]);
+        return redirect()->route('admin.tagihan.show', ['id' => $id])->with('alert-success', 'Successfully remove data');
     }
 }

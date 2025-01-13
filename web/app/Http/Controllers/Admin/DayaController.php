@@ -22,12 +22,17 @@ class DayaController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'daya' => 'required|integer|unique:tarif|min:100',
+            'tarifperkwh' => 'required|integer',
+        ]);
+
         $tarif = new Tarif;
         $tarif->daya = $request->daya;
         $tarif->tarifperkwh = $request->tarifperkwh;
         $tarif->save();
 
-        return redirect()->route('admin.daya');
+        return redirect()->route('admin.daya')->with('alert-success', 'Successfully adding new data');
     }
 
     /**
@@ -44,12 +49,17 @@ class DayaController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $request->validate([
+            'daya' => 'required|integer|min:100',
+            'tarifperkwh' => 'required|integer',
+        ]);
+
         $tarif = Tarif::find($id);
         $tarif->daya = $request->daya;
         $tarif->tarifperkwh = $request->tarifperkwh;
         $tarif->save();
 
-        return redirect()->route('admin.daya');
+        return redirect()->route('admin.daya')->with('alert-success', 'Successfully update data');
     }
 
     /**
@@ -59,6 +69,6 @@ class DayaController extends Controller
     {
         $tarif = Tarif::find($id);
         $tarif->delete();
-        return redirect()->route('admin.daya');
+        return redirect()->route('admin.daya')->with('alert-success', 'Successfully remove data');
     }
 }
