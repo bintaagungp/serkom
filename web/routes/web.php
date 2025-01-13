@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\DayaController;
 use App\Http\Controllers\Admin\PelangganController;
 use App\Http\Controllers\Admin\TagihanController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\IsAdminMiddleware;
 
 Route::get('/', function () {
     return view('welcome');
@@ -35,7 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/listrik/{id}/update', [UserListrikController::class, 'update'])->name('listrik.update');
     Route::delete('/listrik/{id}/delete', [UserListrikController::class, 'destroy'])->name('listrik.destroy');
 
-    Route::prefix('admin')->group(function () {
+    Route::middleware([IsAdminMiddleware::class])->prefix('admin')->group(function () {
         Route::get('/dashboard', function() {
             return view('admin.dashboard');
         })->name('admin.dashboard');
