@@ -1,5 +1,7 @@
 FROM composer:latest as composer
 
+FROM node:latest as node
+
 FROM php:8.2.27-apache
 
 RUN apt-get update
